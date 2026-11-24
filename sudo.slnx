@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="sudo/sudo.vcxproj" Id="cecd67c7-a62a-4768-83f3-469fba72a581" />
+</Solution>
