@@ -1,5 +1,7 @@
-#include "services.h"
 #include <windows.h>
+
+#include "checks.h"
+#include "services.h"
 
 int checkServices() {
 	SC_HANDLE srvHandle = OpenSCManagerA(NULL, NULL, SC_MANAGER_ENUMERATE_SERVICE);
@@ -33,64 +35,23 @@ int checkServices() {
 		if (srvconfig->lpBinaryPathName == NULL || srvconfig->lpServiceStartName == NULL) continue;
 
 		char* path = srvconfig->lpBinaryPathName;
-		char* lastSlash = strrchr(path, '\\');
-		if (lastSlash == NULL) continue;
-		int dirLen = lastSlash - path;
-		char dirPath[MAX_PATH];
-		strncpy_s(dirPath, MAX_PATH, path, dirLen);
-		dirPath[dirLen] = '\0';
 
-		char* dotPos = strchr(lastSlash, '.'); //extension dot
-		char* argsStart = NULL;
-		if (dotPos != NULL) {
-			argsStart = strchr(dotPos, ' '); //arg start pos
-		}
-		char binPath[MAX_PATH];
-
-		char testFile[MAX_PATH];
-		strcpy_s(testFile, MAX_PATH, dirPath);
-		strcat_s(testFile, MAX_PATH, "\\sudo_test.tmp");
 
 		if (!strcmp(srvconfig->lpServiceStartName, username)) continue;
 
+		PathCheckResult result = checkPath(path);
 
-		if (argsStart != NULL) {
-			strncpy_s(binPath, MAX_PATH, path, argsStart - path);
-		}
-		else {
-			strcpy_s(binPath, MAX_PATH, path);
-		}
-		HANDLE cfHandle = CreateFileA(binPath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-		if (cfHandle != INVALID_HANDLE_VALUE) {
-			printf("[*] Writable binary: %s\n", binPath);
-			CloseHandle(cfHandle);
+
+		if (result.binaryWritable) {
+			printf("[*] [%s] Service Has Overwritable Binary: %s\n", stp[i].lpServiceName, result.binPath);
 		}
 
-		HANDLE dirHandle = CreateFileA(testFile, GENERIC_WRITE, 0, NULL, CREATE_NEW, 0, NULL);
-		if (dirHandle != INVALID_HANDLE_VALUE) {
-			printf("[*] Writable service directory: %s\n", dirPath);
-			CloseHandle(dirHandle);
-			DeleteFileA(testFile);
+		if (result.dirWritable) {
+			printf("[*] [%s] Service Has Writable service directory: %s\n", stp[i].lpServiceName, result.dirPath);
 		}
-
-
-		if (strchr(dirPath, ' ') && path[0] != '"') {
-			char gapPath[MAX_PATH];
-
-			for (int j = 0; j < strlen(path); j++) {
-				if (path[j] == ' ') {
-					strncpy_s(gapPath, MAX_PATH, path, j);
-					strcat_s(gapPath, MAX_PATH, ".exe");
-
-					HANDLE uqHandle = CreateFileA(gapPath, GENERIC_WRITE, 0, NULL, CREATE_NEW, 0, NULL);
-
-					if (uqHandle != INVALID_HANDLE_VALUE) {
-						printf("[*] Writable unquoted path found: %s\n", gapPath);
-						CloseHandle(uqHandle);
-						DeleteFileA(gapPath);
-					}
-				}
-
+		if (result.gapCount > 0) {
+			for (int g = 0; g < result.gapCount; g++) {
+				printf("[*] [%s] Service Has Unquoted Gap: %s\n", stp[i].lpServiceName, result.gapPaths[g]);
 			}
 		}
 		free(srvconfig);

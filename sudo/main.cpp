@@ -3,6 +3,7 @@
 
 #include "tokens.h"
 #include "services.h"
+#include "tasks.h"
 
 using namespace std;
 
@@ -19,6 +20,11 @@ int main() {
 	cout << "---------------------|Checking Writable/Unquoted Service Paths|---------------------\n";
 	if (checkServices()) {
 		cout << "Failed To Check Services\n";
+		return 0;
+	}
+	cout << "-----------------------|Checking Overwritable Scheduled Tasks|-----------------------\n";
+	if (checkTasks()) {
+		cout << "Failed To Check Tasks\n";
 		return 0;
 	}
 }

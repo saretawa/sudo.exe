@@ -140,12 +140,16 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="checks.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="services.c" />
+    <ClCompile Include="tasks.cpp" />
     <ClCompile Include="tokens.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="checks.h" />
     <ClInclude Include="services.h" />
+    <ClInclude Include="tasks.h" />
     <ClInclude Include="tokens.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
