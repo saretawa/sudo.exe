@@ -30,6 +30,9 @@
     <ClCompile Include="checks.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="registry.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tokens.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="checks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="registry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

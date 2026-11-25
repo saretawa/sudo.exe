@@ -1,5 +1,3 @@
-#include <windows.h>
-
 #include "checks.h"
 
 PathCheckResult checkPath(char* path) {

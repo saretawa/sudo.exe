@@ -9,6 +9,7 @@ int checkServices() {
 	DWORD bufSize = NULL;
 	DWORD srvCount = NULL;
 
+
 	EnumServicesStatusExA(srvHandle, SC_ENUM_PROCESS_INFO, SERVICE_WIN32, SERVICE_STATE_ALL, NULL, 0, &bufSize, &srvCount, NULL, NULL);
 
 	ENUM_SERVICE_STATUS_PROCESSA* stp = (ENUM_SERVICE_STATUS_PROCESSA*)malloc(bufSize);
@@ -19,7 +20,7 @@ int checkServices() {
 	DWORD userLen = 256;
 
 	GetUserNameA(username, &userLen);
-
+	
 	for (int i = 0; i < srvCount; i++) {
 		HANDLE srv = OpenServiceA(srvHandle, stp[i].lpServiceName, SERVICE_QUERY_CONFIG);
 		DWORD srvbufSize = NULL;
@@ -40,7 +41,6 @@ int checkServices() {
 		if (!strcmp(srvconfig->lpServiceStartName, username)) continue;
 
 		PathCheckResult result = checkPath(path);
-
 
 		if (result.binaryWritable) {
 			printf("[*] [%s] Service Has Overwritable Binary: %s\n", stp[i].lpServiceName, result.binPath);

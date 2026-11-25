@@ -142,12 +142,14 @@
   <ItemGroup>
     <ClCompile Include="checks.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="registry.c" />
     <ClCompile Include="services.c" />
     <ClCompile Include="tasks.cpp" />
     <ClCompile Include="tokens.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="checks.h" />
+    <ClInclude Include="registry.h" />
     <ClInclude Include="services.h" />
     <ClInclude Include="tasks.h" />
     <ClInclude Include="tokens.h" />
